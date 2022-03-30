@@ -29,17 +29,17 @@ export default {
     this.activeUser(id);
   },
   methods: {
-    activeUser(id) {
 
+    activeUser(id) {
       this.$http
         .post("http://localhost:8081/user/activeUser/" + id)
         .then((res) => {
           if (res.data.code == 200) {
             this.imgUrl = "ok.png";
-            this.tips = "恭喜您，账号激活成功";
+            this.tips = "恭喜您，账号激活成功!";
           } else if (res.data.code == 500) {
             this.imgUrl = "error.png";
-            this.tips = "账号激活失败，请重新注册";
+            this.tips = "账号激活失败，请重新注册!";
           }
         })
         .catch((err) => {
