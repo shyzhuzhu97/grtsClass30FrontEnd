@@ -13,7 +13,20 @@ const routes = [
   {
     path: "/index",
     name: "index",
-    component: () => import("../views/index.vue")
+    component: () => import("../views/index.vue"),
+    children: [
+      {
+        path: "/index",
+        name: "statement.vue",
+        component: () => import("../views/statement.vue")
+      }
+      ,
+      {
+        path: "/addDishCategory",
+        name: "addDishCategory",
+        component: () => import("../views/addDishCategory.vue")
+      }
+    ]
   },
   {
     path: "/register",
