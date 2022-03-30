@@ -8,20 +8,40 @@ const routes = [
   {
     path: '/',
     name: 'login',
-    component:()=> import("../views/login.vue")
+    component: () => import("../views/login.vue")
+  },
+  {
+    path: "/index",
+    name: "index",
+    component: () => import("../views/index.vue")
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: () => import("../views/register.vue")
+  },
+  {
+    path: "/active",
+    name: "active",
+    component: () => import("../views/active.vue")
   }
-  // {
-  //   path: '/about',
-  //   name: 'about',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  // }
 ]
+
 
 const router = new VueRouter({
   routes
 })
+router.beforeEach((to, from, next) => {
+  if (to.path == "/" || to.path == "/register"||to.path == "/active") {
+    next();//一定要让用户访问到登录 注册 激活页面
+  } else {
+    let nickName = sessionStorage.getItem("nickName");
+    if (nickName != null) {
+      next();
+    } else {
+      next("/");
+    }
+  }
+});
 
 export default router
