@@ -13,15 +13,10 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button
-          >
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)"
-            >删除</el-button
-          >
+          <el-button size="mini" @click="handleEdit(scope.row)">修改</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(scope.row)"
+            >删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -34,9 +29,10 @@
     <div class="block">
       <el-pagination
         @current-change="handleCurrentChange"
-        :page-size="10"
+        :page-size="6"
         layout="prev, pager, next, jumper"
-        :total="this.totalNum"
+        :total="totalNum"
+        :current-page.sync="currentPage"
       >
       </el-pagination>
     </div>
@@ -55,11 +51,49 @@ export default {
     this.handleCurrentChange(1);
   },
   methods: {
-    handleEdit(index, row) {
-      console.log(index, row);
+    handleEdit(row) {
+      console.log(row);
     },
-    handleDelete(index, row) {
-      console.log(index, row);
+    handleDelete(row) {
+      let deleteId = row.id;
+      this.$confirm("确认删除该菜品分类？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$http
+            .get(
+              "http://localhost:8081/category/deleteCategoryById/" + deleteId
+            )
+            .then((res) => {
+              if (res.data.code == 200) {
+                this.$message({
+                  type: "success",
+                  message: "删除成功!",
+                });
+                this.handleCurrentChange(1);
+                this.currentPage=1
+              } else if (res.data.code == 500) {
+                this.$message({
+                  message: "删除失败",
+                  type: "warning",
+                });
+              }
+            })
+            .catch((err) => {
+              this.$message({
+                message: "连接超时",
+                type: "warning",
+              });
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
     },
     handleCurrentChange(val) {
       this.$http
@@ -88,16 +122,11 @@ export default {
 
 
 <style>
-.el-table__header tr,
-  .el-table__header th {
-    padding: 0;
-    height: 20px;
+.block {
+  width: 40%;
+  height: 32px;
+  margin-left: 40%;
+  margin-top: 1%;
 }
-.el-table__body tr,
-  .el-table__body td {
-    padding: 0;
-    height: 40px;
-}
-  
 </style>
 

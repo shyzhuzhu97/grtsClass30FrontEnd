@@ -1,9 +1,7 @@
+
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
-
 Vue.use(VueRouter)
-
 const routes = [
   {
     path: '/',
@@ -43,6 +41,11 @@ const routes = [
         path: "/showDish",
         name: "showDish",
         component: () => import("../views/showDish.vue")
+      },
+      {
+        path: "/home",
+        name: "home",
+        component: () => import("../views/home.vue")
       }
     ]
   },
@@ -63,7 +66,7 @@ const router = new VueRouter({
   routes
 })
 router.beforeEach((to, from, next) => {
-  if (to.path == "/" || to.path == "/register"||to.path == "/active") {
+  if (to.path == "/" || to.path == "/register" || to.path == "/active") {
     next();//一定要让用户访问到登录 注册 激活页面
   } else {
     let nickName = sessionStorage.getItem("nickName");

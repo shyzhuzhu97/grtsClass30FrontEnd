@@ -94,13 +94,14 @@ export default {
         .then((res) => {
           if (res.data.code == 200) {
             this.$message({
-              message: "登陆成功",
+              message: "登录成功",
               type: "success",
             });
             console.log(res.data.data);
-            //2.吧用户的昵称和头像存起来
+            //2.吧用户的昵称和头像和id存起来
             sessionStorage.setItem("nickName", res.data.data.user.nickName);
             sessionStorage.setItem("avatar", res.data.data.user.avatar);
+            sessionStorage.setItem("id", res.data.data.user.id);
             //3.跳转页面（首页）
             this.$router.push("/index");
           } else {

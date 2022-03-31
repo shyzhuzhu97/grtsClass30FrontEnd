@@ -179,15 +179,11 @@ export default {
         });
     },
     handleAvatarSuccess(res, file) {
-      console.log(res);
-      console.log(file);
       this.user.avatar = res.data.imgPath;
       this.$message({
                 message: "上传头像成功",
                 type: "success",
               });
-
-      //this.user.imageUrl = "http://localhost/obito.jpg";
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === "image/jpeg";

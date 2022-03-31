@@ -6,14 +6,14 @@
           <h3>当麦基订餐后台管理系统</h3>
           <div class="userInfo">
             <span v-text="'欢迎您, ' + this.nickName"></span>
-            <el-dropdown
+            <el-dropdown @command="handleCommand"
               ><img :src="avatar" alt="" />
 
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item icon="el-icon-s-home"
+              <el-dropdown-menu slot="dropdown" >
+                <el-dropdown-item icon="el-icon-s-home" command="home"
                   >个人中心</el-dropdown-item
                 >
-                <el-dropdown-item icon="el-icon-s-unfold"
+                <el-dropdown-item icon="el-icon-s-unfold" command="logout"
                   >退出登录</el-dropdown-item
                 >
               </el-dropdown-menu>
@@ -46,8 +46,12 @@
                   </template>
                   <el-menu-item-group>
                     <template slot="title"></template>
-                    <el-menu-item index="/addDishCategory">添加菜品分类</el-menu-item>
-                    <el-menu-item index="/showDishCategory">管理菜品分类</el-menu-item>
+                    <el-menu-item index="/addDishCategory"
+                      >添加菜品分类</el-menu-item
+                    >
+                    <el-menu-item index="/showDishCategory"
+                      >管理菜品分类</el-menu-item
+                    >
                   </el-menu-item-group>
                 </el-submenu>
                 <el-submenu index="2">
@@ -87,6 +91,14 @@ export default {
   methods: {
     handleOpen(key, keyPath) {},
     handleClose(key, keyPath) {},
+    handleCommand(command) {
+      if (command == "home") {
+        this.$router.push("/home");
+      } else if (command == "logout") {
+        this.$router.push("/");
+        sessionStorage.clear();
+      }
+    },
   },
 };
 </script>
@@ -121,9 +133,6 @@ export default {
 }
 .el-main {
   background-color: #f3f3f4;
-  color: #333;
-  text-align: center;
-  line-height: 160px;
 }
 body > .el-container {
   margin-bottom: 40px;
