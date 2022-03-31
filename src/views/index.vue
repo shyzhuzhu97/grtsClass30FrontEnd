@@ -47,7 +47,7 @@
                   <el-menu-item-group>
                     <template slot="title"></template>
                     <el-menu-item index="/addDishCategory">添加菜品分类</el-menu-item>
-                    <el-menu-item index="2-2">管理菜品分类</el-menu-item>
+                    <el-menu-item index="/showDishCategory">管理菜品分类</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
                 <el-submenu index="2">
@@ -57,8 +57,8 @@
                   </template>
                   <el-menu-item-group>
                     <template slot="title"></template>
-                    <el-menu-item index="3-1">添加菜品</el-menu-item>
-                    <el-menu-item index="3-2">管理菜品</el-menu-item>
+                    <el-menu-item index="/addDish">添加菜品</el-menu-item>
+                    <el-menu-item index="/showDish">管理菜品</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
               </el-menu>
@@ -175,5 +175,6 @@ body > .el-container {
   margin-left: 60px;
   width: 120px;
   height: 60px;
+  text-overflow: ellipsis;
 }
 </style>

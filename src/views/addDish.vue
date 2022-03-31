@@ -1,5 +1,5 @@
-<template id="addDishCategory" >
-  <div>woshi addDishCategory</div>
+<template id="addDish" >
+  <div>woshi addDish</div>
 </template>
 <script>
 export default {

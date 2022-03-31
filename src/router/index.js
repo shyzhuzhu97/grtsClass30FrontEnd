@@ -22,9 +22,27 @@ const routes = [
       }
       ,
       {
+        path: "/showDishCategory",
+        name: "showDishCategory",
+        component: () => import("../views/showDishCategory.vue")
+      }
+      ,
+      {
         path: "/addDishCategory",
         name: "addDishCategory",
         component: () => import("../views/addDishCategory.vue")
+      }
+      ,
+      {
+        path: "/addDish",
+        name: "addDish",
+        component: () => import("../views/addDish.vue")
+      }
+      ,
+      {
+        path: "/showDish",
+        name: "showDish",
+        component: () => import("../views/showDish.vue")
       }
     ]
   },
