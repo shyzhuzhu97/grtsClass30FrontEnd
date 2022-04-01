@@ -1,6 +1,13 @@
 <template id="showDishCategory" >
   <div>
-    <el-table stripe border :data="tableData" style="width: 100%">
+    <el-table
+      stripe
+      border
+      :data="tableData"
+      @selection-change="handleSelectionChange"
+      style="width: 100%"
+    >
+      <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column type="index" width="50" label="编号"></el-table-column>
 
       <el-table-column prop="dishCategoryName" label="菜品分类名称" width="180">
@@ -11,7 +18,12 @@
       </el-table-column>
       <el-table-column prop="updated" label="修改时间" width="180">
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column>
+        <template slot="header">
+          <el-button type="danger" style="margin-left: 1px" @click="deleteIds()"
+            >批量删除</el-button
+          >
+        </template>
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -40,11 +52,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
               <el-button @click="dialogFormVisible = false">取 消</el-button>
-              <el-button
-                type="primary"
-                @click="
-                  submitCategory();
-                "
+              <el-button type="primary" @click="submitCategory()"
                 >确 定</el-button
               >
             </div>
@@ -81,10 +89,12 @@ export default {
       currentPage: 1,
       dialogFormVisible: false,
       category: {
-        id:"",
+        id: "",
         dishCategoryName: "",
         dishCategoryDes: "",
       },
+      categories: [],
+      ids: [],
       formLabelWidth: "120px",
     };
   },
@@ -98,7 +108,7 @@ export default {
         .get("http://localhost:8081/category/findCategoryById/" + row.id)
         .then((res) => {
           if (res.data.code == 200) {
-            this.category=res.data.data.category;
+            this.category = res.data.data.category;
           } else if (res.data.code == 500) {
             this.$message({
               message: "查询失败",
@@ -176,7 +186,6 @@ export default {
         });
     },
     submitCategory() {
-      
       if (this.category.dishCategoryName == "") {
         this.$message({
           message: "菜品分类名称不能为空!",
@@ -207,6 +216,38 @@ export default {
               type: "warning",
             });
             this.dialogFormVisible = false;
+          }
+        })
+        .catch((err) => {
+          this.$message({
+            message: "连接超时",
+            type: "warning",
+          });
+        });
+    },
+    handleSelectionChange(val) {
+      this.categories = val;
+    },
+    deleteIds() {
+      this.ids = [];
+      for (let category in this.categories) {
+        this.ids.push(this.categories[category].id);
+      }
+      this.$http
+        .post("http://localhost:8081/category/deleteIds", this.ids)
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.$message({
+              type: "success",
+              message: "删除成功!",
+            });
+            this.handleCurrentChange(1);
+            this.currentPage = 1;
+          } else if (res.data.code == 500) {
+            this.$message({
+              message: "删除失败",
+              type: "warning",
+            });
           }
         })
         .catch((err) => {
