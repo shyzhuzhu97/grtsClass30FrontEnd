@@ -55,7 +55,6 @@ export default {
       this.$http
         .post("http://localhost:8081/category/addCategory", this.category)
         .then((res) => {
-          console.log(res);
           if (res.data.code == 200) {
             this.$message({
               message: "添加成功",

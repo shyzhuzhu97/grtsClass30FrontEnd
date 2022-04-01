@@ -94,7 +94,6 @@ export default {
         dishCategoryDes: "",
       },
       categories: [],
-      ids: [],
       formLabelWidth: "120px",
     };
   },
@@ -102,6 +101,7 @@ export default {
     this.handleCurrentChange(1);
   },
   methods: {
+    //修改菜品的回显
     handleEdit(row) {
       console.log(row);
       this.$http
@@ -123,6 +123,8 @@ export default {
           });
         });
     },
+
+    //删除菜品
     handleDelete(row) {
       let deleteId = row.id;
       this.$confirm("确认删除该菜品分类？", "提示", {
@@ -164,6 +166,8 @@ export default {
           });
         });
     },
+
+    //展示菜品
     handleCurrentChange(val) {
       this.$http
         .get("http://localhost:8081/category/showCategoryByPage/" + val)
@@ -185,6 +189,8 @@ export default {
           });
         });
     },
+
+    //修改菜品分类
     submitCategory() {
       if (this.category.dishCategoryName == "") {
         this.$message({
@@ -225,16 +231,18 @@ export default {
           });
         });
     },
+
+    //批量删除
     handleSelectionChange(val) {
       this.categories = val;
     },
     deleteIds() {
-      this.ids = [];
+      let ids = [];
       for (let category in this.categories) {
-        this.ids.push(this.categories[category].id);
+        ids.push(this.categories[category].id);
       }
       this.$http
-        .post("http://localhost:8081/category/deleteIds", this.ids)
+        .post("http://localhost:8081/category/deleteIds", ids)
         .then((res) => {
           if (res.data.code == 200) {
             this.$message({
