@@ -1,7 +1,7 @@
 <template id="home" >
   <div>
     <h3 class="title">个人中心</h3>
-    <el-form
+    <el-form ref="form" :model="user"
       label-width="60px"
       style="margin-left: 160px"
     >

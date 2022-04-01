@@ -13,19 +13,52 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.row)">修改</el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(scope.row)"
+          <el-button
+            size="mini"
+            @click="
+              dialogFormVisible = true;
+              handleEdit(scope.row);
+            "
+            >修改</el-button
+          >
+          <el-dialog title="修改菜品分类" :visible.sync="dialogFormVisible">
+            <el-form ref="form" :model="category">
+              <el-form-item label="菜品分类名称" :label-width="formLabelWidth">
+                <el-input
+                  v-model="category.dishCategoryName"
+                  autocomplete="off"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="菜品分类描述" :label-width="formLabelWidth">
+                <el-input
+                  type="textarea"
+                  :rows="4"
+                  v-model="category.dishCategoryDes"
+                  autocomplete="off"
+                ></el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button
+                type="primary"
+                @click="
+                  submitCategory();
+                "
+                >确 定</el-button
+              >
+            </div>
+          </el-dialog>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleDelete(scope.row)"
+            style="margin-left: 20px"
             >删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
-    <!-- <div style="margin-top: 20px">
-      <el-button @click="toggleSelection([tableData[1]])"
-        >全选</el-button
-      >
-      <el-button @click="toggleSelection()">删除</el-button>
-    </div> -->
     <div class="block">
       <el-pagination
         @current-change="handleCurrentChange"
@@ -45,6 +78,14 @@ export default {
     return {
       tableData: [],
       totalNum: 0,
+      currentPage: 1,
+      dialogFormVisible: false,
+      category: {
+        id:"",
+        dishCategoryName: "",
+        dishCategoryDes: "",
+      },
+      formLabelWidth: "120px",
     };
   },
   created() {
@@ -53,6 +94,24 @@ export default {
   methods: {
     handleEdit(row) {
       console.log(row);
+      this.$http
+        .get("http://localhost:8081/category/findCategoryById/" + row.id)
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.category=res.data.data.category;
+          } else if (res.data.code == 500) {
+            this.$message({
+              message: "查询失败",
+              type: "warning",
+            });
+          }
+        })
+        .catch((err) => {
+          this.$message({
+            message: "连接超时",
+            type: "warning",
+          });
+        });
     },
     handleDelete(row) {
       let deleteId = row.id;
@@ -73,7 +132,7 @@ export default {
                   message: "删除成功!",
                 });
                 this.handleCurrentChange(1);
-                this.currentPage=1
+                this.currentPage = 1;
               } else if (res.data.code == 500) {
                 this.$message({
                   message: "删除失败",
@@ -107,6 +166,47 @@ export default {
               message: "连接超时",
               type: "warning",
             });
+          }
+        })
+        .catch((err) => {
+          this.$message({
+            message: "连接超时",
+            type: "warning",
+          });
+        });
+    },
+    submitCategory() {
+      
+      if (this.category.dishCategoryName == "") {
+        this.$message({
+          message: "菜品分类名称不能为空!",
+          type: "warning",
+        });
+        return;
+      } else if (this.category.dishCategoryName == "") {
+        this.$message({
+          message: "菜品分类描述不能为空!",
+          type: "warning",
+        });
+        return;
+      }
+      this.$http
+        .post("http://localhost:8081/category/updateCategory", this.category)
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.$message({
+              message: "修改成功",
+              type: "success",
+            });
+            this.dialogFormVisible = false;
+            this.handleCurrentChange(1);
+            this.currentPage = 1;
+          } else if (res.data.code == 500) {
+            this.$message({
+              message: "修改失败",
+              type: "warning",
+            });
+            this.dialogFormVisible = false;
           }
         })
         .catch((err) => {
