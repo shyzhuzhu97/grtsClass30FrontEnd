@@ -34,6 +34,7 @@
                 background-color="#2F4050"
                 text-color="#A7B1C2"
                 active-text-color="#fff"
+                :default-active="$route.path"
               >
                 <el-menu-item index="/index">
                   <i class="el-icon-menu"></i>

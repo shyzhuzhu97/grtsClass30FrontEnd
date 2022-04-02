@@ -21,7 +21,9 @@
           v-model="value"
           placeholder="请选择菜品分类"
           style="width: 300px; margin-left: 50px"
+          value-key="id" 
         >
+        
           <el-option
             v-for="item in categories"
             :key="item.id"
@@ -34,7 +36,7 @@
       <el-form-item label="菜品图片">
         <el-upload
           class="avatar-uploader"
-          action="http://localhost:8081/dish/uploadDishImg"
+          action="http://localhost:8081/img/uploadDishImg"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload"
@@ -74,7 +76,7 @@ export default {
         category: {},
       },
       categories: [],
-      value: "",
+      value: {},
     };
   },
   created() {
@@ -83,8 +85,55 @@ export default {
   methods: {
     onSubmit() {
       this.dish.category = this.value;
-      console.log(this.dish);
-      console.log(this.value);
+      if (this.dish.dishName == "") {
+        this.$message({
+          message: "菜品名称不能为空!",
+          type: "warning",
+        });
+        return;
+      } else if (this.dish.dishDes == "") {
+        this.$message({
+          message: "菜品描述不能为空!",
+          type: "warning",
+        });
+        return;
+      } else if (this.dish.dishImg == "") {
+        this.$message({
+          message: "菜品图片不能为空!",
+          type: "warning",
+        });
+        return;
+      }else if (this.dish.price == "") {
+        this.$message({
+          message: "菜品价格不能为空!",
+          type: "warning",
+        });
+        return;
+      }
+      
+      this.$http
+        .post("http://localhost:8081/dish/addDish", this.dish)
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.$message({
+              message: "添加成功",
+              type: "success",
+            });
+            this.$router.push("/showDish");
+          } else if (res.data.code == 500) {
+            this.$message({
+              message: "添加失败",
+              type: "warning",
+            });
+          }
+        })
+        .catch((err) => {
+          this.$message({
+            message: "连接超时",
+            type: "warning",
+          });
+        });
+
     },
     handleAvatarSuccess(res, file) {
       this.dish.dishImg = res.data.imgPath;
@@ -110,7 +159,7 @@ export default {
         .get("http://localhost:8081/category/showCategoryAll")
         .then((res) => {
           console.log(res);
-          this.categories = res.data.data.categories
+          this.categories = res.data.data.categories;
         })
         .catch((err) => {
           this.$message({
