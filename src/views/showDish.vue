@@ -11,12 +11,12 @@
       <el-table-column type="index" width="50" label="编号"></el-table-column>
       <el-table-column prop="dishImg" label="菜品图片" width="120">
         <template   slot-scope="scope">            
-                    <img :src="scope.row.dishImg"  width="80" height="80" />
+                    <img :src="scope.row.dishImg"  width="95" height="80" />
                  </template>   
       </el-table-column>
       <el-table-column prop="dishName" label="菜品名称" width="120">
       </el-table-column>
-      <el-table-column prop="dishDes" label="菜品描述" width="260">
+      <el-table-column prop="dishDes" label="菜品描述" width="220">
       </el-table-column>
       <el-table-column
         prop="category.dishCategoryName"
@@ -24,15 +24,17 @@
         width="120"
       >
       </el-table-column>
-      <el-table-column prop="price" label="菜品价格" width="100">
+      <el-table-column prop="price" label="菜品价格" width="80">
       </el-table-column>
       <el-table-column prop="created" label="创建时间" width="100">
       </el-table-column>
       <el-table-column prop="updated" label="修改时间" width="100">
       </el-table-column>
+      <el-table-column prop="buyCount" label="购买数量" width="50">
+      </el-table-column>
       <el-table-column>
         <template slot="header">
-          <el-button type="danger" style="margin-left: 1px" @click="deleteIds()"
+          <el-button type="danger" style="margin-left: 20px" @click="deleteIds()"
             >批量删除</el-button
           >
         </template>
@@ -73,7 +75,7 @@
             size="mini"
             type="danger"
             @click="handleDelete(scope.row)"
-            style="margin-left: 20px"
+            style="margin-left: 5px"
             >删除
           </el-button>
         </template>
@@ -82,7 +84,7 @@
     <div class="block">
       <el-pagination
         @current-change="handleCurrentChange"
-        :page-size="6"
+        :page-size="5"
         layout="prev, pager, next, jumper"
         :total="totalNum"
         :current-page.sync="currentPage"
@@ -119,7 +121,6 @@ export default {
       this.$http
         .get("http://localhost:8081/dish/showDishByPage/" + val)
         .then((res) => {
-          console.log(res);
           if (res.data.code == 200) {
             this.tableData = res.data.data.dishs;
             this.totalNum = res.data.data.dishNum;
@@ -172,7 +173,7 @@ export default {
         .then(() => {
           this.$http
             .get(
-              "http://localhost:8081/category/deleteCategoryById/" + deleteId
+              "http://localhost:8081/dish/deleteDishById/" + deleteId
             )
             .then((res) => {
               if (res.data.code == 200) {
@@ -243,4 +244,10 @@ export default {
 
 
 <style>
+.block {
+  width: 40%;
+  height: 32px;
+  margin-left: 40%;
+  margin-top: 1%;
+}
 </style>
