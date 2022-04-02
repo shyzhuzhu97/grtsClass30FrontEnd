@@ -158,7 +158,6 @@ export default {
       this.$http
         .get("http://localhost:8081/category/showCategoryAll")
         .then((res) => {
-          console.log(res);
           this.categories = res.data.data.categories;
         })
         .catch((err) => {
