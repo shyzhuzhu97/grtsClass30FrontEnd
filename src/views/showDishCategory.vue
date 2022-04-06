@@ -103,7 +103,6 @@ export default {
   methods: {
     //修改菜品的回显
     handleEdit(row) {
-      console.log(row);
       this.$http
         .get("http://localhost:8081/category/findCategoryById/" + row.id)
         .then((res) => {
